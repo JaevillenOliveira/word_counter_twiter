@@ -20,6 +20,12 @@ All input data must be inside the folder containing the executable file. All the
 ## To execute the serial code
 The code is executed using the command 'time' preappended. This is a Linux command to log wall, user and sys time.
 
+## To build the parallel code
+	g++ -fopenmp parallel-word-counter.cpp -o parallel-word-counter.out
+	
+## To execute the parallel code
+	(time ./parallel-word-counter.out tweets/tweets nonwords.txt keywords.txt 500000) > output.txt 2>> timelog.txt
+
 After the time command is called the executable.
 
 After that, separated by whitespaces, are the parameters: the name of the folder containing the tweet files, the name of the nonwords file, the name of keywords file and the number of tweets to be processed (2092273 is the total number of files).
