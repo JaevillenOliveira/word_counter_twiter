@@ -1,0 +1,126 @@
+
+##############################
+Handling 2092273 files
+
+real	2m46,411s
+user	1m50,505s
+sys	1m14,058s
+
+##############################
+Handling 2092273 files
+
+real	2m55,312s
+user	1m37,763s
+sys	1m5,507s
+
+##############################
+Handling 2092273 files
+
+real	2m52,557s
+user	1m31,418s
+sys	1m3,098s
+
+##############################
+Handling 2092273 files
+
+real	3m58,443s
+user	3m8,330s
+sys	2m14,831s
+
+##############################
+Handling 2092273 files
+
+real	3m36,493s
+user	2m35,129s
+sys	1m49,045s
+
+##############################
+Handling 2092273 files
+
+real	3m35,410s
+user	2m36,375s
+sys	1m48,762s
+
+##############################
+Handling 2092273 files
+
+real	3m19,090s
+user	2m9,079s
+sys	1m29,387s
+
+##############################
+Handling 2092273 files
+
+real	3m24,102s
+user	2m20,555s
+sys	1m38,720s
+
+##############################
+Handling 1569205 files
+
+real	2m14,576s
+user	1m19,652s
+sys	0m55,957s
+
+##############################
+Handling 1569205 files
+
+real	2m11,502s
+user	1m13,359s
+sys	0m51,710s
+
+##############################
+Handling 1569205 files
+
+real	2m11,061s
+user	1m13,047s
+sys	0m50,923s
+
+##############################
+Handling 1569205 files
+
+real	2m10,795s
+user	1m12,898s
+sys	0m50,860s
+
+##############################
+Handling 1569205 files
+
+real	2m13,503s
+user	1m11,468s
+sys	0m49,601s
+
+##############################
+Handling 1046137 files
+
+real	1m33,515s
+user	1m0,288s
+sys	0m42,992s
+
+##############################
+Handling 1046137 files
+
+real	1m26,792s
+user	0m46,514s
+sys	0m33,741s
+
+##############################
+Handling 1046137 files
+
+real	1m27,062s
+user	0m49,144s
+sys	0m33,962s
+
+##############################
+Handling 1046137 files
+
+real	1m26,824s
+user	0m47,523s
+sys	0m32,605s
+
+##############################
+Handling 1046137 files
+
+real	1m28,055s
+user	0m50,206s
+sys	0m36,648s

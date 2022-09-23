@@ -24,7 +24,7 @@ The code is executed using the command 'time' preappended. This is a Linux comma
 	g++ -fopenmp parallel-word-counter.cpp -o parallel-word-counter.out
 	
 ## To execute the parallel code
-	(time ./parallel-word-counter.out tweets/tweets nonwords.txt keywords.txt 500000) > output.txt 2>> timelog.txt
+	(time ./parallel-word-counter.out tweets nonwords.txt keywords.txt 500000) > output.txt 2>> timelog.txt
 
 After the time command is called the executable.
 
