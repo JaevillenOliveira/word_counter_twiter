@@ -1,3 +1,0 @@
-files=(*)
-echo "${files[0]}"
-
