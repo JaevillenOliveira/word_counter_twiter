@@ -44,8 +44,8 @@ After the time command is called the executable.
 
 After that, separated by whitespaces, are the parameters: the name of the folder containing the tweet files, the name of the nonwords file, the name of keywords file and the number of tweets to be processed (2092273 is the total number of files).
 
-    (time ./serial-word-counter {name-of-tweets-folder} {name-of-nonwords-file} {name-of-keywords-file} {num-of-files-to-handle}) > output.txt 2>> timelog.txt
-    (time ./serial-word-counter tweets nonwords.txt keywords.txt 2092273) > output.txt 2>> timelog.txt
+    (time ./serial-word-counter {name-of-tweets-folder} {name-of-keywords-file} {num-of-files-to-handle} {num-threads}) > output.txt 2>> timelog.txt
+    (time ./serial-word-counter tweets nonwords.txt keywords.txt 2092273 4) > output.txt 2>> timelog.txt
 
 ## To build the parallel code
 	g++ -fopenmp parallel-word-counter.cpp -o parallel-word-counter.out

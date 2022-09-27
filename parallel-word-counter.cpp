@@ -10,6 +10,8 @@
 #include <omp.h>
 #include <map>
 #include <set>
+#include <vector>
+#include <locale.h>
 
 using namespace std;
 
@@ -25,6 +27,10 @@ std::set <string> readKeywords(string fileName){
    return keywords;
 }
 
+bool isNotAlpha(char c) {
+   return !isalpha(c);
+}
+
 bool isValidWord(string word){
    if(word.size() <= 2)
       return false;
@@ -35,89 +41,99 @@ bool isValidWord(string word){
    return true;
 }
 
-bool isNotAlpha(char c) {
-   return !isalpha(c);
-}
-
 void clearWord(string &word){
    transform(word.begin(), word.end(), word.begin(), ::tolower);
-   word.erase(remove_if(word.begin(), word.end(), isNotAlpha), word.end());
-   
+//    word.erase(remove_if(word.begin(), word.end(), isNotAlpha), word.end());
 }
 
-void handleTweet(string fileName, std::map<string,int> &words, std::set<string> nonWords){
+char removeAccentuation(char c, char h){
+	string comAcentos = "ÄÅÁÂÀÃäáâàãÉÊËÈéêëèÍÎÏÌíîïìÖÓÔÒÕöóôòõÜÚÛüúûùÇç";
+	string semAcentos = "AAAAAAaaaaaEEEEeeeeIIIIiiiiOOOOOoooooUUUuuuuCc";
+
+	for (int i = 0; i < comAcentos.size(); i += 2){
+		if(c == comAcentos[i] and h == comAcentos[i+1]){
+			return semAcentos[i/2];
+		}
+	}
+	return c;
+}
+
+int getWordIndex(std::set<string> keywords, string wordToFind){
+	int index = 0;
+	for (auto el : keywords) {
+		if (el == wordToFind)
+			return index;
+		index++;
+	}
+	return -1;
+}
+
+void handleTweet(string fileName, std::set<string> keywords, std::vector <int> &wordCounter){
 	//Creating an input stream to read a file
 	ifstream ifstream_ob;
 	ifstream_ob.open(fileName, ios::in);
 
 	char ch;
-   std::string str;
-   std::map <string,int>::iterator itMap;
-   std::set <string>::iterator itSet;
+	int wordAt;
+	std::string str;
 
-   str.clear();
-	while(ifstream_ob)
-	{
+	str.clear();
+	while(ifstream_ob){
 		ch = ifstream_ob.get(); 
-      if(ch != ' ' and ch != '\t' and ch != '\n' and isascii(ch) and ch != EOF){ 
-         str += ch;
-      }else{
-         if(isValidWord(str)){
-            clearWord(str);
-            itSet = nonWords.find(str);
-            if(itSet == nonWords.end()){ // if the string doesn't belongs to the non-words list
-            	#pragma omp critical
-            	{
-				   itMap = words.find(str);
-				   if (itMap != words.end()){
-				      itMap->second += 1;
-				   }else
-				      words[str] = 1;
-            	}
-            }
-         }
-         str.clear();
-      }
+		if(!isascii(ch)){
+			ch = removeAccentuation(ch, ifstream_ob.get());
+		}
+		if(ch != ' ' and ch != '\t' and ch != '\n' and isascii(ch) and ch != EOF){ 
+			str += ch;
+		}else{
+			if(isValidWord(str)){
+				clearWord(str);
+				wordAt = getWordIndex(keywords, str);
+				if(wordAt != -1){
+					wordCounter.at(wordAt)++;
+
+				}
+			}
+			str.clear();
+		}
 	}
 	ifstream_ob.close();
-
 }
 
-void writeAllWordsCounter(std::map <string,int> words){
-   ofstream MyFile("allWordsCounter.txt");
-   for (std::map <string,int>::iterator it = words.begin(); it != words.end(); ++it){
-      MyFile << it->first << ": " << it->second << endl;
-   }
-   MyFile.close();
-}
-
-void writeKeywordsCounter(std::map <string,int> words, string keywordsFilePath){
-   std::set <string> keywords = readKeywords(keywordsFilePath);
+void writeKeywordsCounter(std::set<string> keywords, std::vector <int> wordCounter, int numFiles, int numThreads){
    std::set <string>::iterator itKeywrds;
 
-   ofstream MyFile("keywordsCounter.txt");
-   for (std::map <string,int>::iterator it = words.begin(); it != words.end(); ++it){
-      itKeywrds = keywords.find(it->first);
-      if(itKeywrds != keywords.end())
-         MyFile << it->first << ": " << it->second << endl;
-   }
+   	ofstream MyFile("results/"+std::to_string(numThreads)+"threads/"+std::to_string(numFiles)+"files/keywordsCounter.txt");
+   	int index = 0;
+	for (auto el : keywords) {
+		MyFile << el << ": " << wordCounter.at(index) << endl;
+		index++;
+	}
    MyFile.close();
+}
+
+void manualMerge(std::vector <int> &out, std::vector <int> &in){
+	std::transform (out.begin(), out.end(), in.begin(), out.begin(),std::plus<int>());
 }
 
 int main(int argc, char** argv){
-    // ########### sequential part start
+    setlocale(LC_ALL, "Portuguese");
 
 	const int maxArraySize = 250000;
     std::string dirPath(argv[1]); // get the name of the folder containing the tweets (the folder must be on the same directory as the code)
-    std::string nonwordsFileName(argv[2]); // get the name of the file containing the nonwords (the file must be on the same directory as the code)
-    std::set <string> nonWords = readKeywords(nonwordsFileName); // read the nonwords file
-    std::string keywrdsFileName(argv[3]); // get the name of the file containing the keywords (the file must be on the same directory as the code)
-    int numFiles = atoi(argv[4]);
-    std::map <string,int> words; // structure to store all the words counted
+    std::string keywrdsFileName(argv[2]); // get the name of the file containing the keywords (the file must be on the same directory as the code)
+    std::set <string> keywords = readKeywords(keywrdsFileName);
+	std::vector <int> finalWordCounter (keywords.size()); 
+    int numFiles = atoi(argv[3]);
+	int numThreads = atoi(argv[4]);
+
     DIR *dr;
     struct dirent *en;
     dr = opendir(argv[1]); //open directory
-    if (dr) {
+
+	#pragma omp declare reduction (sumvector : std::vector<int> : manualMerge(omp_out, omp_in)) initializer(omp_priv(omp_orig))
+    
+	if (dr) {
     	int fileCounter = 0, chunkSize;
     	while (fileCounter < numFiles) {
     		if((numFiles - fileCounter) > maxArraySize)
@@ -139,23 +155,18 @@ int main(int argc, char** argv){
 				count++;
 			}
 			fileCounter += chunkSize;
-			#pragma omp parallel for
+
+			std::vector <int> tempWordCounter (keywords.size()); 
+			#pragma omp parallel for reduction(sumvector:tempWordCounter)
 			for (count = 0; count < chunkSize; count++) {
-				cout << filePaths[count] << endl;
-				handleTweet(filePaths[count], words, nonWords); 
+				// cout << " File " << count << endl;
+				handleTweet(filePaths[count], keywords, tempWordCounter); 
 			} 
-    	
+			manualMerge(finalWordCounter, tempWordCounter);
     	}
     	
-        cout << "nfksjdhfkwgbseakjbgWFVJHWEFuyw GFEWHFGYWUEfguw yv " << endl;
         closedir(dr); 
-        writeAllWordsCounter(words);
-        writeKeywordsCounter(words, keywrdsFileName);
-
-        ofstream MyFile("timelog.txt", std::ios_base::app);
-        MyFile << '\n' << "##############################" << '\n' << "Handling "+ to_string(numFiles) + " files" << endl;
-        MyFile.close();
-
+        writeKeywordsCounter(keywords, finalWordCounter, numFiles, numThreads);
     }
    return(0);
 }
