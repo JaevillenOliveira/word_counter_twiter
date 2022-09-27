@@ -159,7 +159,7 @@ int main(int argc, char** argv){
 			std::vector <int> tempWordCounter (keywords.size()); 
 			#pragma omp parallel for reduction(sumvector:tempWordCounter)
 			for (count = 0; count < chunkSize; count++) {
-				cout << numThreads << " Threads - File " << count << endl;
+				cout << numThreads << " Threads - " << numFiles << " Files - File " << count << endl;
 				handleTweet(filePaths[count], keywords, tempWordCounter); 
 			} 
 			manualMerge(finalWordCounter, tempWordCounter);
