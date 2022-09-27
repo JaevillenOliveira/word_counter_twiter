@@ -10,7 +10,7 @@ for numThreads in 1 2 3 4 5 6 7 8 9 10 11 12; do
         echo "" >> timelog.txt
         for i in 1 2 3 4 5; do
             echo "Run $i" >> timelog.txt
-            (time ./parallel-word-counter.out tweets keywords.txt $problemSize $numThreads) > output.txt 2>> timelog.txt
+            (time ./parallel-word-counter.out tweets keywords.txt $problemSize $numThreads) 2>> timelog.txt
             echo "" >> timelog.txt
         done
     done
