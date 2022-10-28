@@ -103,60 +103,17 @@ void handleTweet(string fileName, std::set<string> keywords, std::vector <int> &
 
 void writeKeywordsCounter(std::set<string> keywords, std::vector <int> wordCounter, int numFiles, int numP){
    std::set <string>::iterator itKeywrds;
-
-   	ofstream MyFile("results/"+std::to_string(numP)+"threads/"+std::to_string(numFiles)+"files/keywordsCounter.txt");
+   	ofstream MyFile("results/"+std::to_string(numP)+"processes/"+std::to_string(numFiles)+"files/keywordsCounter.txt");
    	int index = 0;
 	for (auto el : keywords) {
 		MyFile << el << ": " << wordCounter.at(index) << endl;
 		index++;
 	}
-   MyFile.close();
+   	MyFile.close();
 }
 
 void manualMerge(std::vector <int> &out, std::vector <int> &in){
 	std::transform (out.begin(), out.end(), in.begin(), out.begin(),std::plus<int>());
-}
-
-int countWorloadSize(string dirPath, char *dirname, int numFiles){
-	DIR *dr;
-    struct dirent *en;
-    int wlSize = 0, filesCounter = 0;
-
-    dr = opendir(dirname); //open directory
-   	ofstream MyFile("fileNames.txt");
-
-	en = readdir(dr);
-	while(en != NULL && filesCounter < numFiles){
-		if((dirPath + '/' + en->d_name != dirPath + '/' + ".") && (dirPath + '/' + en->d_name != dirPath + '/' + "..")){
-			ifstream in_file(dirPath + '/' + en->d_name, ios::binary);
-			in_file.seekg(0, ios::end);
-			wlSize += in_file.tellg();
-			MyFile << dirPath + '/' + en->d_name << endl;
-			filesCounter++;
-		}
-		en = readdir(dr);
-	} 
-    MyFile.close();
-	closedir(dr); 
-	
-	return wlSize;
-}
-
-void splitWorkload(string dirPath, char *dirname, int treshold, int numP){
-	int wlSizeCounter, filesCounter = 0, numPCounter = 1;
-
-	ifstream MyReadFile("fileNames.txt");
-	string fileName;
-	while (numPCounter <= numP) {
-		ofstream MyFile("fileNames4Rank" + std::to_string(numPCounter++) + ".txt");
-		wlSizeCounter = 0;
-		while(wlSizeCounter <= treshold && getline (MyReadFile, fileName)){
-			ifstream in_file(fileName, ios::binary);
-			in_file.seekg(0, ios::end);
-			wlSizeCounter += in_file.tellg();
-			MyFile << fileName << endl;
-		}
-	}
 }
 
 int main(int argc, char** argv){
@@ -169,7 +126,6 @@ int main(int argc, char** argv){
     int numFiles = atoi(argv[3]);//, numThreads = atoi(argv[4]);
 	int numP, myRank, rc, receivedMsgs;
 	MPI_Status status;
-
 
 	rc = MPI_Init(&argc, &argv);
 	if (rc != MPI_SUCCESS) {

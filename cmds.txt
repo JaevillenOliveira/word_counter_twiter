@@ -1,0 +1,11 @@
+mpic++ -o parallel-mpi-word-counter parallel-mpi-word-counter.cpp
+mpirun -np 2 parallel-mpi-word-counter tweets keywords.txt 50
+
+ssh -oHostKeyAlgorithms=+ssh-dss jaevillen@172.16.112.7
+scp -oHostKeyAlgorithms=+ssh-dss file jaevillen@172.16.112.7:word-counter
+rsync -av --ignore-existing -e "ssh -oHostKeyAlgorithms=+ssh-dss" tweets/ jaevillen@umbu.uefs.br:word-counter/tweets/
+
+
+files=(*)
+echo "${files[0]}"
+ls | wc -l
