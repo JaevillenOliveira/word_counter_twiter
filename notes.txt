@@ -1,0 +1,5 @@
+- copiar todo o worload para todas as unidades de cômputo
+- calcular tamanho tota do workload em bytes
+- dividir pelo número de unidades de cômputo para definir um treshold
+- armazenar nomes dos arquivos em um arquivo .txt
+- informar a cada unidade de cômputo quais arquivos deve processar
