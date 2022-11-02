@@ -101,9 +101,11 @@ void handleTweet(string fileName, std::set<string> keywords, std::vector <int> &
 	ifstream_ob.close();
 }
 
-void writeKeywordsCounter(std::set<string> keywords, std::vector <int> wordCounter, int numFiles, int numP){
-   std::set <string>::iterator itKeywrds;
-   	ofstream MyFile("results/"+std::to_string(numP)+"processes/"+std::to_string(numFiles)+"files/keywordsCounter.txt");
+void writeKeywordsCounter(std::set<string> keywords, std::vector <int> wordCounter, int wkPercent, int numP){
+   	std::set <string>::iterator itKeywrds;
+   	ofstream MyFile("setup-results/" + 
+                std::to_string(numP) + "processes/" +
+                "problemSize" + std::to_string(wkPercent) + "/keywordsCounter.txt");
    	int index = 0;
 	for (auto el : keywords) {
 		MyFile << el << ": " << wordCounter.at(index) << endl;
@@ -112,20 +114,21 @@ void writeKeywordsCounter(std::set<string> keywords, std::vector <int> wordCount
    	MyFile.close();
 }
 
-void manualMerge(std::vector <int> &out, std::vector <int> &in){
+void manualReduction(std::vector <int> &out, std::vector <int> &in){
 	std::transform (out.begin(), out.end(), in.begin(), out.begin(),std::plus<int>());
 }
 
 int main(int argc, char** argv){
     setlocale(LC_ALL, "Portuguese");
 
-    std::string dirPath(argv[1]); // get the name of the folder containing the tweets (the folder must be on the same directory as the code)
-    std::string keywrdsFileName(argv[2]); // get the name of the file containing the keywords (the file must be on the same directory as the code)
+    std::string keywrdsFileName(argv[1]); // get the name of the file containing the keywords (the file must be on the same directory as the code)
     std::set <string> keywords = readKeywords(keywrdsFileName);
 	std::vector <int> finalWordCounter (keywords.size()); 
-    int numFiles = atoi(argv[3]);//, numThreads = atoi(argv[4]);
+    int wkPercent = atoi(argv[2]);//, numThreads = atoi(argv[4]);
 	int numP, myRank, rc, receivedMsgs;
 	MPI_Status status;
+
+	time_t start, end;
 
 	rc = MPI_Init(&argc, &argv);
 	if (rc != MPI_SUCCESS) {
@@ -136,18 +139,28 @@ int main(int argc, char** argv){
 	MPI_Comm_size(MPI_COMM_WORLD, &numP);
 	MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
 	if(myRank == 0){
-		splitWorkload(dirPath, argv[1], countWorloadSize(dirPath, argv[1], numFiles) / numP, numP);
+		time(&start);
+
 		receivedMsgs = numP - 1;
 		while((receivedMsgs--) > 0){
 			std::vector <int> tempWordCounter (keywords.size()); 
 			// wait for requests, get the source
 			MPI_Recv(&tempWordCounter[0], keywords.size(), MPI_INT, MPI_ANY_SOURCE, 0, MPI_COMM_WORLD, &status);
-			manualMerge(finalWordCounter, tempWordCounter);
+			manualReduction(finalWordCounter, tempWordCounter);
 		}
-		writeKeywordsCounter(keywords, finalWordCounter, numFiles, numP);
+		time(&end);
+		double time_taken = double(end - start);
+
+		ofstream TimeFile("timelog.txt", ios::app);
+		TimeFile << "    Time: " << time_taken << setprecision(5) << endl;
+		TimeFile.close();
+		writeKeywordsCounter(keywords, finalWordCounter, wkPercent, numP);
 	}else {
 		std::vector <int> myWordCounter (keywords.size()); 
-		ifstream MyReadFile("fileNames4Rank" + std::to_string(myRank) + ".txt");
+		ifstream MyReadFile("setup-results/" + 
+                std::to_string(numP) + "processes/" +
+                "problemSize" + std::to_string(wkPercent) + 
+				"/fileNames4Rank" + std::to_string(myRank) + ".txt");
 		string fileName;
 		while (getline (MyReadFile, fileName)) {
 			handleTweet(fileName, keywords, myWordCounter); 
