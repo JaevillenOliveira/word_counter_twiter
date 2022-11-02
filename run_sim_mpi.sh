@@ -2,8 +2,10 @@
 g++ preprocessing.cpp -o preprocessing.out
 
 for numP in 1 2 3 4 5 6 7 8 9 10 11 12; do
-    for problemSize in 10 25 50 75 100; do #10% 25% 50% 75% 100%
-        ./preprocessing.out tweets 1000 $problemSize $numP
+    for problemSizePercent in 10 25 50 75 100; do #10% 25% 50% 75% 100%
+        ./preprocessing.out tweets /state/partition1/tweets 381697 $problemSizePercent $numP
+    done
+done
 
 
 

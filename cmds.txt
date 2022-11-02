@@ -9,3 +9,6 @@ rsync -av --ignore-existing -e "ssh -oHostKeyAlgorithms=+ssh-dss" tweets/ jaevil
 files=(*)
 echo "${files[0]}"
 ls | wc -l
+
+du -shcb --apparent-size tweets/*.txt get size of files
+
