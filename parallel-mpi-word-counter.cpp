@@ -148,6 +148,7 @@ int main(int argc, char** argv){
     int wkPercent = atoi(argv[2]);//, numThreads = atoi(argv[4]);
 	int numP, myRank, rc, receivedMsgs;
 	MPI_Status status;
+	const string curDirectory = "/home/jaevillen/Ecomp/word_counter_twiter/tweets/";
 
 	time_t start, end;
 
@@ -188,11 +189,10 @@ int main(int argc, char** argv){
 	}else {
 		FILE *tweetFile, *tweetsNamesFile;
 		std::vector <int> myWordCounter (keywords.size()); 
-		// ifstream MyReadFile("setup-results/" + 
-        //         std::to_string(numP) + "processes/" +
-        //         "problemSize" + std::to_string(wkPercent) + 
-		// 		"/fileNames4Rank" + std::to_string(myRank) + ".txt");
-			
+
+		int i;
+		string temp = "";
+		char tweetAlternatePath[200];
 		char np[5], wlP[5], rk[5];
 		sprintf (np, "%d", numP);
 		sprintf (wlP, "%d", wkPercent);
@@ -208,19 +208,35 @@ int main(int argc, char** argv){
 		strcat(filename, rk);
 		strcat(filename, ".txt");
 
-
 		tweetsNamesFile = fopen(filename, "r"); 
 		cout << "Running    " << filename << endl;
+
 		char line[200];
 		while (fgets(line, sizeof(line), tweetsNamesFile)) { 
 			// remove the new line character
-			for(int i = 0; i < 200; i++){
+			for(i = 0; i < 200; i++){
 				if(line[i] == '\n'){
 					line[i] = '\0';
 					i = 200;
 				}
 			}
 			tweetFile = fopen(line, "r");
+			if(!tweetFile){
+				for(i = 0; i < sizeof(line); i++){
+					if(line[i] == '/'){
+						temp.clear();
+					}else{
+						if(line[i] == '\n'){
+							break;
+						}
+						temp = temp + line[i];
+					}
+				}
+				
+				strcpy(tweetAlternatePath,curDirectory.c_str());
+				strcat(tweetAlternatePath, temp.c_str());
+				tweetFile = fopen(tweetAlternatePath, "r");
+			};
 			handleTweet(tweetFile, keywords, myWordCounter); 
 			fclose(tweetFile);
 		}
