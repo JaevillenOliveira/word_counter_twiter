@@ -30,7 +30,9 @@ void splitWorkload(char *dirname, char *dirPathClusterUnity, int treshold, int n
 		strcat(filename, rk);
 		strcat(filename, ".txt");
 
-		ofstream MyFile(filename);
+		FILE *fptr;
+		fptr = fopen(filename,"w");
+		fptr = freopen(filename,"a", fptr);
 	
 		wlSizeCounter = 0;
 		while(en != NULL && wlSizeCounter <= treshold){
@@ -44,16 +46,18 @@ void splitWorkload(char *dirname, char *dirPathClusterUnity, int treshold, int n
 				strcpy(pathClusterU,dirPathClusterUnity);
 				strcat(pathClusterU, "/");
 				strcat(pathClusterU, en->d_name);
+				strcat(pathClusterU, "\n");
 
 				ifstream in_file(path, ios::binary);
 				in_file.seekg(0, ios::end);
 				wlSizeCounter += in_file.tellg();
-				MyFile << pathClusterU << endl;
+
+				fputs(pathClusterU, fptr);
 			}
 			en = readdir(dr);
 		} 
 		numPCounter++;
-    	MyFile.close();
+    	fclose(fptr);
 	}
 	closedir(dr); 
 }
@@ -62,8 +66,8 @@ int main(int argc, char** argv){
 	int totalWlSize = atoi(argv[3]); // the total size in bytes
     int wkPercent = atoi(argv[4]); // the percentual of the workload to be used
 	int numP = atoi(argv[5]); // number of processes that will be used to process the load
-
+	cout << "splitting" << endl;
     splitWorkload(argv[1], argv[2], (totalWlSize * wkPercent / 100) / numP, numP, wkPercent);
-
+	cout << "split done!" << endl;
    return(0);
 }

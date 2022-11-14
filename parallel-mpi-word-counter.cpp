@@ -148,8 +148,9 @@ int main(int argc, char** argv){
     int wkPercent = atoi(argv[2]);//, numThreads = atoi(argv[4]);
 	int numP, myRank, rc, receivedMsgs;
 	MPI_Status status;
-	const string curDirectory = "/home/jaevillen/Ecomp/word_counter_twiter/tweets/";
-
+	// const string curDirectory = "/home/jaevillen/Ecomp/word_counter_twiter/tweets/";
+	const string curDirectory = "/home/jaevillen/word-counter/tweets/";
+	
 	time_t start, end;
 
 	rc = MPI_Init(&argc, &argv);
