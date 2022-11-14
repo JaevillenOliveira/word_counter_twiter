@@ -1,174 +1,435 @@
+sljkflw
+    Time: 0.000000    Time: 1.000000    Time: 0.000000    Time: 0.000000    Time: 0.000000##################
 #Processes 1
 
 #ProblemSize 10
 
 Run 1
-    Time: 0
-
+    Time: 0.000000
 Run 2
-    Time: 0
-
+    Time: 0.000000
 Run 3
-    Time: 0
-
+    Time: 0.000000
 Run 4
-    Time: 0
-
+    Time: 0.000000
 Run 5
-    Time: 0
-
+    Time: 0.000000
 #ProblemSize 25
 
 Run 1
-    Time: 0
-
+    Time: 0.000000
 Run 2
-    Time: 0
-
+    Time: 0.000000
 Run 3
-    Time: 0
-
+    Time: 0.000000
 Run 4
-    Time: 0
-
+    Time: 0.000000
 Run 5
-    Time: 0
-
+    Time: 0.000000
 #ProblemSize 50
 
 Run 1
-    Time: 0
-
+    Time: 0.000000
 Run 2
-    Time: 0
-
+    Time: 0.000000
 Run 3
-    Time: 0
-
+    Time: 0.000000
 Run 4
-    Time: 0
-
+    Time: 0.000000
 Run 5
-    Time: 0
-
+    Time: 0.000000
 #ProblemSize 75
 
 Run 1
-    Time: 0
-
+    Time: 0.000000
 Run 2
-    Time: 0
-
+    Time: 0.000000
 Run 3
-    Time: 0
-
+    Time: 0.000000
 Run 4
-    Time: 0
-
+    Time: 0.000000
 Run 5
-    Time: 0
-
+    Time: 0.000000
 #ProblemSize 100
 
 Run 1
-    Time: 0
-
+    Time: 0.000000
 Run 2
-    Time: 0
-
+    Time: 0.000000
 Run 3
-    Time: 0
-
+    Time: 0.000000
 Run 4
-    Time: 0
-
+    Time: 0.000000
 Run 5
-    Time: 0
-
+    Time: 0.000000
+##################
 #Processes 2
 
 #ProblemSize 10
 
 Run 1
-    Time: 1
-
+    Time: 0.000000
 Run 2
-    Time: 0
-
+    Time: 0.000000
 Run 3
-    Time: 0
-
+    Time: 0.000000
 Run 4
-    Time: 0
-
+    Time: 0.000000
 Run 5
-    Time: 0
-
+    Time: 0.000000
 #ProblemSize 25
 
 Run 1
-    Time: 0
-
+    Time: 1.000000
 Run 2
-    Time: 0
-
+    Time: 0.000000
 Run 3
-    Time: 0
-
+    Time: 0.000000
 Run 4
-    Time: 0
-
+    Time: 1.000000
 Run 5
-    Time: 0
-
+    Time: 0.000000
 #ProblemSize 50
 
 Run 1
-    Time: 0
-
+    Time: 0.000000
 Run 2
-    Time: 0
-
+    Time: 0.000000
 Run 3
-    Time: 0
-
+    Time: 0.000000
 Run 4
-    Time: 0
-
+    Time: 1.000000
 Run 5
-    Time: 0
-
+    Time: 1.000000
 #ProblemSize 75
 
 Run 1
-    Time: 1
+    Time: 1.000000
+Run 2
+    Time: 1.000000
+Run 3
+    Time: 1.000000
+Run 4
+    Time: 1.000000
+Run 5
+    Time: 1.000000
+#ProblemSize 100
+
+Run 1
 
 Run 2
-    Time: 0
 
 Run 3
-    Time: 0
 
 Run 4
-    Time: 0
 
 Run 5
-    Time: 0
+
+    Time: 0.000000##################
+#Processes 1
+
+#ProblemSize 10
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 25
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 50
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 75
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+
+Run 5
 
 #ProblemSize 100
 
 Run 1
-    Time: 1
 
 Run 2
-    Time: 1
+##################
+#Processes 1
+
+#ProblemSize 10
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 25
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 50
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 75
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 100
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+##################
+#Processes 2
+
+#ProblemSize 10
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 25
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 1.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 50
+
+Run 1
+    Time: 1.000000
+Run 2
+    Time: 1.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 75
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 1.000000
+Run 4
+    Time: 1.000000
+Run 5
+    Time: 1.000000
+#ProblemSize 100
+
+Run 1
+
+Run 2
 
 Run 3
-    Time: 0
 
 Run 4
-    Time: 0
 
 Run 5
-    Time: 0
 
+    Time: 0.000000    Time: 0.000000    Time: 0.000000    Time: 1.000000    Time: 2.000000##################
+#Processes 1
+
+#ProblemSize 10
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 25
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 50
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 75
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 100
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+##################
+#Processes 2
+
+#ProblemSize 10
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 25
+
+Run 1
+    Time: 0.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 1.000000
+#ProblemSize 50
+
+Run 1
+    Time: 1.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 0.000000
+Run 4
+    Time: 0.000000
+Run 5
+    Time: 0.000000
+#ProblemSize 75
+
+Run 1
+    Time: 1.000000
+Run 2
+    Time: 0.000000
+Run 3
+    Time: 1.000000
+Run 4
+    Time: 1.000000
+Run 5
+    Time: 1.000000
+#ProblemSize 100
+
+Run 1
+    Time: 1.000000
+Run 2
+    Time: 1.000000
+Run 3
+    Time: 1.000000
+Run 4
+    Time: 1.000000
+Run 5
+    Time: 1.000000

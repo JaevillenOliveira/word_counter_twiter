@@ -12,4 +12,5 @@ ls | wc -l
 
 du -shcb --apparent-size tweets/*.txt get size of files
 
+nohup rsync -av tweets/ $machine:~/../../state/partition1/tweets/ &
 nohup scp -r tweets/ umbu-1-1:~/../../state/partition1/ &

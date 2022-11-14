@@ -7,16 +7,17 @@
 #include <ctype.h>
 #include <cstdlib>
 #include <cctype>
-#include <omp.h>
-#include <map>
 #include <set>
 #include <vector>
 #include <locale.h>
 #include <mpi.h>
+#include <cstring>
+#include <string>
+#include <sstream> 
 
 using namespace std;
 
-std::set <string> readKeywords(string fileName){
+std::set <string> readKeywords(char *fileName){
    std::set <string> keywords;
    string keyword;
    ifstream MyReadFile(fileName);
@@ -61,31 +62,27 @@ char removeAccentuation(char c, char h){
 
 int getWordIndex(std::set<string> keywords, string wordToFind){
 	int index = 0;
-	for (auto el : keywords) {
-		if (el == wordToFind)
+	for (std::set<string>::iterator it=keywords.begin(); it!=keywords.end(); ++it){
+		if (*it == wordToFind)
 			return index;
 		index++;
 	}
 	return -1;
 }
 
-void handleTweet(string fileName, std::set<string> keywords, std::vector <int> &wordCounter){
-	//Creating an input stream to read a file
-	ifstream ifstream_ob;
-	ifstream_ob.open(fileName, ios::in);
-
+int handleTweet(FILE *tweetFile, std::set<string> keywords, std::vector <int> &wordCounter){
 	char ch;
 	int wordAt;
-	std::string str;
+	string str;
 
 	str.clear();
-	while(ifstream_ob){
-		ch = ifstream_ob.get(); 
+	ch = (char) fgetc(tweetFile);
+	while(ch != EOF){
 		if(!isascii(ch)){
-			ch = removeAccentuation(ch, ifstream_ob.get());
+			ch = removeAccentuation(ch, (char) fgetc(tweetFile));
 		}
 		if(ch != ' ' and ch != '\t' and ch != '\n' and isascii(ch) and ch != EOF){ 
-			str += ch;
+			str = str + ch;
 		}else{
 			if(isValidWord(str)){
 				clearWord(str);
@@ -97,21 +94,46 @@ void handleTweet(string fileName, std::set<string> keywords, std::vector <int> &
 			}
 			str.clear();
 		}
+		ch = (char) fgetc(tweetFile);	
 	}
-	ifstream_ob.close();
+	return 0;
 }
 
 void writeKeywordsCounter(std::set<string> keywords, std::vector <int> wordCounter, int wkPercent, int numP){
    	std::set <string>::iterator itKeywrds;
-   	ofstream MyFile("setup-results/" + 
-                std::to_string(numP) + "processes/" +
-                "problemSize" + std::to_string(wkPercent) + "/keywordsCounter.txt");
+	char np[5], wlP[5], nOcur[10];
+	char filename[200], lineToWrite[50];
+
+	sprintf (np, "%d", numP);
+	sprintf (wlP, "%d", wkPercent);
+
+	strcpy(filename,"setup-results/");
+	strcat(filename, np);
+	strcat(filename, "processes/");
+	strcat(filename, "problemSize");
+	strcat(filename, wlP);
+	strcat(filename, "/keywordsCounter.txt");
+
+	FILE *fptr;
+	fptr = fopen(filename,"w");
+	fptr = freopen(filename,"a", fptr);
+
    	int index = 0;
-	for (auto el : keywords) {
-		MyFile << el << ": " << wordCounter.at(index) << endl;
+	for (std::set<string>::iterator it = keywords.begin(); it != keywords.end(); ++it){
+		sprintf (nOcur, "%d", wordCounter.at(index)); // cast the integer (Num of ocurrences of a word) to char *[]
+		
+		// mounts the phrase: <word>: <word count>
+		strcpy(lineToWrite, (*it).c_str());
+		strcat(lineToWrite, ": ");
+		strcat(lineToWrite, nOcur);
+		strcat(lineToWrite, "\n");
+		
+		//write the line to the file
+		fputs(lineToWrite, fptr);
+		fputs(lineToWrite, fptr);
 		index++;
 	}
-   	MyFile.close();
+   	fclose(fptr);
 }
 
 void manualReduction(std::vector <int> &out, std::vector <int> &in){
@@ -121,8 +143,7 @@ void manualReduction(std::vector <int> &out, std::vector <int> &in){
 int main(int argc, char** argv){
     setlocale(LC_ALL, "Portuguese");
 
-    std::string keywrdsFileName(argv[1]); // get the name of the file containing the keywords (the file must be on the same directory as the code)
-    std::set <string> keywords = readKeywords(keywrdsFileName);
+    std::set <string> keywords = readKeywords(argv[1]);
 	std::vector <int> finalWordCounter (keywords.size()); 
     int wkPercent = atoi(argv[2]);//, numThreads = atoi(argv[4]);
 	int numP, myRank, rc, receivedMsgs;
@@ -151,20 +172,59 @@ int main(int argc, char** argv){
 		time(&end);
 		double time_taken = double(end - start);
 
-		ofstream TimeFile("timelog.txt", ios::app);
-		TimeFile << "    Time: " << time_taken << setprecision(5) << endl;
-		TimeFile.close();
+		FILE *timeFile;
+		timeFile = fopen("timelog.txt","a");
+
+		char lineToWrite[50], timetkstr[20];
+		sprintf (timetkstr, "%f", time_taken);
+
+		strcpy(lineToWrite, "    Time: ");
+		strcat(lineToWrite, timetkstr);
+		
+		//write the line to the file
+		fputs(lineToWrite, timeFile);
+		fclose(timeFile);
 		writeKeywordsCounter(keywords, finalWordCounter, wkPercent, numP);
 	}else {
+		FILE *tweetFile, *tweetsNamesFile;
 		std::vector <int> myWordCounter (keywords.size()); 
-		ifstream MyReadFile("setup-results/" + 
-                std::to_string(numP) + "processes/" +
-                "problemSize" + std::to_string(wkPercent) + 
-				"/fileNames4Rank" + std::to_string(myRank) + ".txt");
-		string fileName;
-		while (getline (MyReadFile, fileName)) {
-			handleTweet(fileName, keywords, myWordCounter); 
+		// ifstream MyReadFile("setup-results/" + 
+        //         std::to_string(numP) + "processes/" +
+        //         "problemSize" + std::to_string(wkPercent) + 
+		// 		"/fileNames4Rank" + std::to_string(myRank) + ".txt");
+			
+		char np[5], wlP[5], rk[5];
+		sprintf (np, "%d", numP);
+		sprintf (wlP, "%d", wkPercent);
+		sprintf (rk, "%d", myRank);
+
+		char filename[200];
+		strcpy(filename,"setup-results/");
+		strcat(filename, np);
+		strcat(filename, "processes/");
+		strcat(filename, "problemSize");
+		strcat(filename, wlP);
+		strcat(filename, "/fileNames4Rank");
+		strcat(filename, rk);
+		strcat(filename, ".txt");
+
+
+		tweetsNamesFile = fopen(filename, "r"); 
+		cout << "Running    " << filename << endl;
+		char line[200];
+		while (fgets(line, sizeof(line), tweetsNamesFile)) { 
+			// remove the new line character
+			for(int i = 0; i < 200; i++){
+				if(line[i] == '\n'){
+					line[i] = '\0';
+					i = 200;
+				}
+			}
+			tweetFile = fopen(line, "r");
+			handleTweet(tweetFile, keywords, myWordCounter); 
+			fclose(tweetFile);
 		}
+		fclose(tweetsNamesFile);
 		MPI_Send(&myWordCounter[0], keywords.size(), MPI_INT, 0, 0, MPI_COMM_WORLD);
 	}
     MPI_Finalize();
