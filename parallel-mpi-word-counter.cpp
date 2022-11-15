@@ -133,7 +133,6 @@ void writeKeywordsCounter(std::set<string> keywords, std::vector <int> wordCount
 		
 		//write the line to the file
 		fputs(lineToWrite, fptr);
-		fputs(lineToWrite, fptr);
 		index++;
 	}
    	fclose(fptr);
@@ -165,6 +164,7 @@ int main(int argc, char** argv){
 	MPI_Comm_size(MPI_COMM_WORLD, &numP);
 	MPI_Comm_rank(MPI_COMM_WORLD, &myRank);
 	if(myRank == 0){
+		cout << "Rank " << myRank << " presenting" << endl;
 		time(&start);
 
 		receivedMsgs = numP - 1;
@@ -189,8 +189,9 @@ int main(int argc, char** argv){
 		//write the line to the file
 		fputs(lineToWrite, timeFile);
 		fclose(timeFile);
-		writeKeywordsCounter(keywords, finalWordCounter, wkPercent, numP);
+		writeKeywordsCounter(keywords, finalWordCounter, wkPercent, numP - 1);
 	}else {
+		cout << "Rank " << myRank << " presenting" << endl;
 		FILE *tweetFile, *tweetsNamesFile;
 		std::vector <int> myWordCounter (keywords.size()); 
 
@@ -198,7 +199,7 @@ int main(int argc, char** argv){
 		string temp = "";
 		char tweetAlternatePath[200];
 		char np[5], wlP[5], rk[5];
-		sprintf (np, "%d", numP);
+		sprintf (np, "%d", numP - 1);
 		sprintf (wlP, "%d", wkPercent);
 		sprintf (rk, "%d", myRank);
 

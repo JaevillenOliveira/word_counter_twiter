@@ -1,7 +1,7 @@
 #!/bin/bash
 mpic++ -o parallel-mpi-word-counter parallel-mpi-word-counter.cpp
 
-for numP in 1 2 3 4 5 6 7 8 9 10 11 12; do
+for numP in 2 3 4 5 6 7 8 9 10 11 12 13; do
     echo "##################" >> timelog.txt
     echo "#Processes $numP" >> timelog.txt
     echo "" >> timelog.txt
@@ -10,7 +10,7 @@ for numP in 1 2 3 4 5 6 7 8 9 10 11 12; do
         echo "" >> timelog.txt
         for i in 1 2 3 4 5; do
             echo "Run $i" >> timelog.txt
-            mpirun -np $numP parallel-mpi-word-counter keywords.txt $problemSize
+            mpirun -np $numP -machinefile machineFile.txt parallel-mpi-word-counter keywords.txt $problemSize
             echo "" >> timelog.txt
         done
     done
