@@ -3,6 +3,7 @@
 #include <iostream>
 #include <fstream> 
 #include <cstring>
+#include <sys/stat.h>
 
 using namespace std;
 
@@ -10,8 +11,9 @@ int main(int argc, char** argv){
     //std::string dirPath(argv[1]); // get the name of the folder (at the front-end machine) containing the tweets (the folder must be on the same directory as the code)
     DIR *dr;
     struct dirent *en;
-    int wlSize = 0;
-    ofstream fnames("fnames.txt");
+    long wlSize = 0;
+    struct stat st;
+
     dr = opendir(argv[1]); //open directory
 	en = readdir(dr);
 	while(en != NULL){
@@ -21,14 +23,16 @@ int main(int argc, char** argv){
         strcat( path, en->d_name );
 
 		if(en->d_name[0] != '.'){
-			ifstream in_file(path, ios::binary);
-			in_file.seekg(0, ios::end);
-			wlSize += in_file.tellg();
-            fnames << path << endl;
+            
+            stat(path, &st);
+			// ifstream in_file(path, ios::binary);
+			// in_file.seekg(0, ios::end);
+            cout << wlSize << " + " << st.st_size << " = ";
+			wlSize += st.st_size;
+            cout << wlSize << endl;
 		}
 		en = readdir(dr);
 	} 
-    fnames.close();
     ofstream MyFile("workloadSize.txt");
     MyFile << wlSize << endl;
     MyFile.close();

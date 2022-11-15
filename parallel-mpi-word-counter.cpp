@@ -101,12 +101,14 @@ int handleTweet(FILE *tweetFile, std::set<string> keywords, std::vector <int> &w
 
 void writeKeywordsCounter(std::set<string> keywords, std::vector <int> wordCounter, int wkPercent, int numP){
    	std::set <string>::iterator itKeywrds;
-	char np[5], wlP[5], nOcur[10];
-	char filename[200], lineToWrite[50];
+	char np[5], wlP[5], nOcur[10];  // char arrays to cast integers into strings
+	char filename[200], // path to the file that stores the count
+			lineToWrite[50]; // store the string containing the phrase to write for each word's count
 
-	sprintf (np, "%d", numP);
-	sprintf (wlP, "%d", wkPercent);
+	sprintf (np, "%d", numP); // cast num processes to string
+	sprintf (wlP, "%d", wkPercent); // cast num workload percentage to string
 
+	// mount the the path to the counter file
 	strcpy(filename,"setup-results/");
 	strcat(filename, np);
 	strcat(filename, "processes/");
@@ -114,6 +116,7 @@ void writeKeywordsCounter(std::set<string> keywords, std::vector <int> wordCount
 	strcat(filename, wlP);
 	strcat(filename, "/keywordsCounter.txt");
 
+	// opens the file to write into
 	FILE *fptr;
 	fptr = fopen(filename,"w");
 	fptr = freopen(filename,"a", fptr);
